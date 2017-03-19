@@ -1,20 +1,110 @@
 'use strict';
 
 exports.BattleAbilities = {
-	shellarmorclone: {
-		onCriticalHit: false,
-		onModifyMove: function (move) {
-			move.willCrit = true;
-			if (move.secondaries) {
-				for (var i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance = 100;
+	"ultratechnical": {
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, attacker, defender, move) {
+			if (basePower <= 90) {
+				this.debug('Technician boost');
+				return this.chainModify(1.5);
+			}
+		},
+		id: "ultratechnical",
+		name: "Ultra Technical",
+	},
+	"dankzone": {
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Dank Zone');
+			this.addPseudoWeather('trickroom', pokemon);
+			this.setWeather('sunnyday');
+			this.setTerrain('grassyterrain');
+		},
+		name: 'Dank Zone',
+		id: 'dankzone',
+	},
+	"staticboost": {
+		onStart: function (pokemon) {
+			this.add('-ability', pokemon, 'Static Boost');
+			this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1, evasion:1});
+		},
+		id:'staticboost',
+		name:'Static Boost',
+	},
+	"phantomguard": {
+		shortDesc: "This Pokemon can only be damaged by supereffective moves and indirect damage.",
+		onStart: function (pokemon) {
+			this.boost({def:3});
+		},
+		onTryHit: function (target, source, move) {
+			if (target.runEffectiveness(move) = 1) {
+				this.add('-immune', target, '[msg]', '[from] ability: Phantom Guard');
+				return null;
+			}
+		},
+		id: "phantomguard",
+		name: "Phantom Guard",
+		rating: 5,
+		num: 25,
+	},
+	"waterchange": {
+			shortDesc: "If user is Elcrest and Rain Dance is active, it changes to Gyarados and it and allies' Attack and Speed are 1.5x.",
+			onStart: function (pokemon) {
+			delete this.effectData.forme;
+		},
+		onUpdate: function (pokemon) {
+			if (!pokemon.isActive || pokemon.baseTemplate.speciesid !== 'dratini') return;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				if (pokemon.template.speciesid !== 'gyarados') {
+					pokemon.formeChange('Gyarados');
+					this.add('-formechange', pokemon, 'Gyarados', '[msg]');
+				}
+			} else {
+				if (pokemon.template.speciesid === 'gyarados') {
+					pokemon.formeChange('Dratini');
+					this.add('-formechange', pokemon, 'Dratini', '[msg]');
 				}
 			}
 		},
-		id: "shellarmorclone",
-		name: "Shell Armor",
-		rating: 1,
-		num: 1075,
+		onModifyAtkPriority: 3,
+		onAllyModifyAtk: function (atk) {
+			if (this.effectData.target.baseTemplate.speciesid !== 'dratini') return;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 4,
+		onAllyModifySpD: function (spe) {
+			if (this.effectData.target.baseTemplate.speciesid !== 'dratini') return;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chainModify(1.5);
+			}
+		},
+		id: "waterchange",
+		name: "Water Change",
+                },
+                "russianwinter": {
+		onStart: function (source) {
+			this.setWeather('russianwinter');
+		},
+		onAnySetWeather: function (target, source, weather) {
+			if (this.getWeather().id === 'russianwinter' && !(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
+		},
+		onEnd: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			for (let i = 0; i < this.sides.length; i++) {
+				for (let j = 0; j < this.sides[i].active.length; j++) {
+					let target = this.sides[i].active[j];
+					if (target === pokemon) continue;
+					if (target && target.hp && target.hasAbility('russianwinter')) {
+						this.weatherData.source = target;
+						return;
+					}
+				}
+			}
+			this.clearWeather();
+		},
+		id: "russianwinter",
+		name: "Russian Winter",
 	},
         "flairhax": {
 		onModifyMovePriority: -2,
@@ -49,19 +139,12 @@ exports.BattleAbilities = {
 			if (target.side === source.side) return;
 			return 1;
 		},
-		stopAttackEvents: true,
+		onModifyMove: function(move, pokemon) {
+			move.ignoreAbility = true;
+		},
 		id: "pressurebreaker",
 		name: "Pressure Breaker",
 		rating: 1.5,
-	},
-dankster: {
-		onModifyPriority: function (priority, pokemon, target, move) {
-			if (move && move.priority == 0) {
-				return priority + 1;
-			}
-		},
-		id: "dankster",
-		name: "Dankster",
 	},
 	flameguard: {
 		onTryHit: function (target, source, move) {
@@ -111,26 +194,6 @@ dankster: {
 		},
 		id: "flameguard",
 		name: "Flame Guard",
-	},
-	discoverme: {
-		onTryHit: function (target, source, move) {
-			if (target !== source && (move.type === 'Water')) {
-				if (!this.heal(target.maxhp  / 20)) {
-					this.add('-immune', target, '[msg]', '[from] ability: discover me');
-				}
-				return null;
-			}
-		},
-                onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type== "Dragon") {
-				this.debug('discover me weaken');
-				return this.chainModify(0.5);
-			}
-		},
-		id: "discoverme",
-		name: "discover me",
-		rating: 3.5,
-		num: 10,
 	},
 	breakthrough: {
 		onModifyMovePriority: -5,
@@ -250,9 +313,11 @@ dankster: {
 				return false;
 			}
 			let randomType = possibleTypes[this.random(possibleTypes.length)];
-
-			if (!source.setType(randomType)) return false;
-			this.add('-start', source, 'typechange', randomType);
+			target.types = [].push(randomType);
+			this.add('-start', target, 'typechange', randomType);
+		},
+		onSwitchOut: function(pokemon) {
+			pokemon.types = pokemon.baseTemplate.types;
 		},
 		id: "theunderlord",
 		name: "The Underlord",
@@ -269,6 +334,7 @@ dankster: {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
+			
 			this.useMove(newMove, target, source);
 			return null;
 		},
@@ -309,7 +375,9 @@ dankster: {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Wonder Breaker');
 		},
-		stopAttackEvents: true,
+		onModifyMove: function(move, pokemon) {
+			move.ignoreAbility = true;
+		},
 		onAnyModifyBoost: function (boosts, target) {
 			let source = this.effectData.target;
 			if (source === target) return;

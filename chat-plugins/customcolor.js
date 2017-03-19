@@ -40,14 +40,14 @@ function generateCSS(name, color) {
     var css = '';
     var rooms = [];
     name = toId(name);
-    for (var room in Rooms.rooms) {
-        if (Rooms.rooms[room].id === 'global' || Rooms.rooms[room].type !== 'chat' || Rooms.rooms[room].isPersonal) continue;
-        rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' strong em');
-        rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' strong');
-        rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' span');
-    }
-    css = rooms.join(', ');
-    css += '{\ncolor: ' + color + ' !important;\n}\n';
+    Rooms.rooms.forEach((curRoom, id) => {
+		if (id === 'global' || curRoom.type !== 'chat' || curRoom.isPersonal) return;
+		if (!isNaN(Number(id.charAt(0)))) return;
+		rooms.push('#' + id + '-userlist-user-' + name + ' strong em');
+		rooms.push('#' + id + '-userlist-user-' + name + ' strong');
+		rooms.push('#' + id + '-userlist-user-' + name + ' span');
+	});
+    css = rooms.join(', ') + '{\ncolor: ' + color + ' !important;\n}\n';
     css += '.chat.chatmessage-' + name + ' strong {\n';
     css += 'color: ' + color + ' !important;\n}\n';
     return css;
@@ -71,8 +71,8 @@ exports.commands = {
             return;
         }
 
-        this.sendReply("|raw|You have given <b><font color=" + target[1] + ">" + Tools.escapeHTML(target[0]) + "</font></b> a custom color.");
-        Rooms('staff').add('|raw|' + Tools.escapeHTML(target[0]) + " has recieved a <b><font color=" + target[1] + ">custom color</font></b> from " + Tools.escapeHTML(user.name) + ".").update();
+        this.sendReply("|raw|You have given <b><font color=" + target[1] + ">" + Chat.escapeHTML(target[0]) + "</font></b> a custom color.");
+        Rooms('staff').add('|raw|' + Chat.escapeHTML(target[0]) + " has recieved a <b><font color=" + target[1] + ">custom color</font></b> from " + Chat.escapeHTML(user.name) + ".").update();
         customColors[toId(target[0])] = target[1];
         updateColor();
     },
@@ -107,7 +107,7 @@ exports.commands = {
         target = target.split(',');
         for (var u in target) target[u] = target[u].trim();
         if (!target[1]) return this.parse('/help colorpreview');
-        return this.sendReplyBox('<b><font size="3" color="' +  target[1] + '">' + Tools.escapeHTML(target[0]) + '</font></b>');
+        return this.sendReplyBox('<b><font size="3" color="' +  target[1] + '">' + Chat.escapeHTML(target[0]) + '</font></b>');
     },
     colorpreviewhelp: ["Usage: /colorpreview [user], [color] - Previews what that username looks like with [color] as the color."],
 };

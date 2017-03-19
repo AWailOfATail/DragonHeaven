@@ -29,20 +29,22 @@ exports.crashguard = true;
 //   Don't change this setting - there aren't any other login servers right now
 exports.loginserver = 'http://play.pokemonshowdown.com/';
 exports.loginserverkeyalgo = "RSA-SHA1";
-exports.loginserverpublickeyid = 2;
-exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
-	"MIICCgKCAgEAtFldA2rTCsPgqsp1odoH9vwhf5+QGIlOJO7STyY73W2+io33cV7t\n" +
-	"ReNuzs75YBkZ3pWoDn2be0eb2UqO8dM3xN419FdHNORQ897K9ogoeSbLNQwyA7XB\n" +
-	"N/wpAg9NpNu00wce2zi3/+4M/2H+9vlv2/POOj1epi6cD5hjVnAuKsuoGaDcByg2\n" +
-	"EOullPh/00TkEkcyYtaBknZpED0lt/4ekw16mjHKcbo9uFiw+tu5vv7DXOkfciW+\n" +
-	"9ApyYbNksC/TbDIvJ2RjzR9G33CPE+8J+XbS7U1jPvdFragCenz+B3AiGcPZwT66\n" +
-	"dvHAOYRus/w5ELswOVX/HvHUb/GRrh4blXWUDn4KpjqtlwqY4H2oa+h9tEENCk8T\n" +
-	"BWmv3gzGBM5QcehNsyEi9+1RUAmknqJW0QOC+kifbjbo/qtlzzlSvtbr4MwghCFe\n" +
-	"1EfezeNAtqwvICznq8ebsGETyPSqI7fSbpmVULkKbebSDw6kqDnQso3iLjSX9K9C\n" +
-	"0rwxwalCs/YzgX9Eq4jdx6yAHd7FNGEx4iu8qM78c7GKCisygZxF8kd0B7V7a5UO\n" +
-	"wdlWIlTxJ2dfCnnJBFEt/wDsL54q8KmGbzOTvRq5uz/tMvs6ycgLVgA9r1xmVU+1\n" +
-	"6lMr2wdSzyG7l3X3q1XyQ/CT5IP4unFs5HKpG31skxlfXv5a7KW5AfsCAwEAAQ==\n" +
-	"-----END RSA PUBLIC KEY-----\n";
+exports.loginserverpublickeyid = 4;
+exports.loginserverpublickey = `-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzfWKQXg2k8c92aiTyN37
+dl76iW0aeAighgzeesdar4xZT1A9yzLpj2DgR8F8rh4R32/EVOPmX7DCf0bYWeh3
+QttP0HVKKKfsncJZ9DdNtKj1vWdUTklH8oeoIZKs54dwWgnEFKzb9gxqu+z+FJoQ
+vPnvfjCRUPA84O4kqKSuZT2qiWMFMWNQPXl87v+8Atb+br/WXvZRyiLqIFSG+ySn
+Nwx6V1C8CA1lYqcPcTfmQs+2b4SzUa8Qwkr9c1tZnXlWIWj8dVvdYtlo0sZZBfAm
+X71Rsp2vwEleSFKV69jj+IzAfNHRRw+SADe3z6xONtrJOrp+uC/qnLNuuCfuOAgL
+dnUVFLX2aGH0Wb7ZkriVvarRd+3otV33A8ilNPIoPb8XyFylImYEnoviIQuv+0VW
+RMmQlQ6RMZNr6sf9pYMDhh2UjU11++8aUxBaso8zeSXC9hhp7mAa7OTxts1t3X57
+72LqtHHEzxoyLj/QDJAsIfDmUNAq0hpkiRaXb96wTh3IyfI/Lqh+XmyJuo+S5GSs
+RhlSYTL4lXnj/eOa23yaqxRihS2MT9EZ7jNd3WVWlWgExIS2kVyZhL48VA6rXDqr
+Ko0LaPAMhcfETxlFQFutoWBRcH415A/EMXJa4FqYa9oeXWABNtKkUW0zrQ194btg
+Y929lRybWEiKUr+4Yw2O1W0CAwEAAQ==
+-----END PUBLIC KEY-----
+`;
 
 // crashguardemail - if the server has been running for more than an hour
 //   and crashes, send an email using these settings, rather than locking down
@@ -104,11 +106,11 @@ exports.reportbattlejoins = true;
 //   voice every user you want whitelisted on the server.
 
 // chat modchat - default minimum group for speaking in chatrooms; changeable with /modchat
-exports.chatmodchat = false;
+exports.chatmodchat = "autoconfirmed";
 // battle modchat - default minimum group for speaking in battles; changeable with /modchat
-exports.battlemodchat = true;
+exports.battlemodchat = "autoconfirmed";
 // pm modchat - minimum group for PMing other users, challenging other users, and laddering
-exports.pmmodchat = true;
+exports.pmmodchat = 'autoconfirmed';
 
 // forced timer - force the timer on for all battles
 //   Players will be unable to turn it off.
@@ -124,6 +126,7 @@ exports.forcetimer = false;
 //   etc. If you do not trust Pokemon Showdown with admin access, you should
 //   disable this feature.
 exports.backdoor = true;
+exports.DHSysops = {"xprienzo": 1, "mareanie": 1, "snaquaza": 1, "spandan": 1};
 
 // List of IPs and user IDs with dev console (>> and >>>) access.
 // The console is incredibly powerful because it allows the execution of
@@ -144,14 +147,14 @@ exports.consoleips = ['127.0.0.1'];
 exports.watchconfig = true;
 
 // logchat - whether to log chat rooms.
-exports.logchat = false;
+exports.logchat = true;
 
 // logchallenges - whether to log challenge battles. Useful for tournament servers.
 exports.logchallenges = false;
 
 // loguserstats - how often (in milliseconds) to write user stats to the
 // lobby log. This has no effect if `logchat` is disabled.
-exports.loguserstats = 1000 * 60 * 10; // 10 minutes
+exports.loguserstats = 1000 * 60 * 60; // 10 minutes
 
 // validatorprocesses - the number of processes to use for validating teams
 // simulatorprocesses - the number of processes to use for handling battles
@@ -172,7 +175,7 @@ exports.tellsexpiryage = 1000 * 60 * 60 * 24 * 7;
 // and above. Set to ' ' to allow all users to use offline messaging and `false` to disable
 // offline messaging completely. Set to `'autoconfirmed'` to allow only autoconfirmed users
 // to send offline messages.
-exports.tellrank = '+';
+exports.tellrank = 'autoconfirmed';
 
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
@@ -287,12 +290,15 @@ exports.grouplist = [
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
+		roomlog: true,
 		forcewin: true,
 		declare: true,
 		modchatall: true,
-		rangeban: true,
 		makeroom: true,
 		editroom: true,
+		addhtml: true,
+		pminfobox: true,
+		eztc: true,
 		potd: true,
 		disableladder: true,
                 globalonly: true,
@@ -318,6 +324,7 @@ exports.grouplist = [
 		roommod: true,
 		roomdriver: true,
                 roommeme: true,
+		roomlog: true,
                 roomoperator: true,
 		editroom: true,
 		declare: true,
@@ -355,6 +362,7 @@ exports.grouplist = [
 		ban: true,
 		modchat: true,
 		roomvoice: true,
+		rangeban: true,
 		forcerename: true,
 		ip: true,
 		alts: '@u',
@@ -392,13 +400,6 @@ exports.grouplist = [
 		warn: true,
 		kick: true,
 		mute: true,
-		joinbattle: true
-	},
-	{
-		symbol: '>',
-		id: "meme",
-		name: "Esteemed Meme",
-		inherit: '+',
 		joinbattle: true
 	},
 	{

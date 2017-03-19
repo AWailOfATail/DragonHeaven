@@ -4,23 +4,25 @@
 
 var color = require('../config/color');
 hashColor = function(name, bold) {
-	return (bold ? "<b>" : "") + "<font color=" + color(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Tools.escapeHTML(Users.getExact(name).name) : Tools.escapeHTML(name)) + "</font>" + (bold ? "</b>" : "");
+	return (bold ? "<b>" : "") + "<font color=" + color(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Chat.escapeHTML(Users.getExact(name).name) : Chat.escapeHTML(name)) + "</font>" + (bold ? "</b>" : "");
 }
 
 exports.commands = {
 	credit: 'credits',
 	credits: function (target, room, user) {
 		this.popupReply("|html|" + "<font size=4><center><u><b>Dragon Heaven Credits!</b></u></center></font><br />" +
-					"<u>Owners:</u><br />" +
+					"<u>Owner:</u><br />" +
 					"- " + hashColor('XpRienzo', true) + " (Founder, Host, Sysadmin)<br />" +
-                    "- " + hashColor('Paul☯71◕‿◕', true) + " (Developer, Lead Policy)<br />" +
-                    "- " + hashColor('Snaq', true) + " (Major Contributor, Formats)<br />" +
-                    "- " + hashColor('Spandan', true) + " (Format Developer)<br />" +
-					"<br />" +
+                                        "<br />" +
 					"<u>Development:</u><br />" +
-					"- " + hashColor('charizard8888', true) + " (Intro's)<br />" +
-                    "- " + hashColor('Diarmuid O\'Dyna', true) + " (Art)<br />" +
-                    "- " + hashColor('Eternal Mayhem', true) + " (Intro's)<br />" +
+                    "- " + hashColor('Snaquaza', true) + " (Major Contributor, Formats, Development)<br />" +
+                    "- " + hashColor('Spandan', true) + " (Format Development, <s>Crashes</s>)<br />" +
+					"<br />" +
+					"<u>Contributors:</u><br />" +
+					"- " + hashColor('charizard8888', true) + " (Roomintros, HTML, CSS, Development)<br />" +
+                    "- " + hashColor('ClassyZ', true) + " (DHSSB, Development)<br />" +
+                    "- " + hashColor('Eternal Mayhem', true) + " (Roomintro's)<br />" +
+                    "- " + hashColor('Spects', true) + " (Development)<br />" +
 					"<br />" +
 					"<u>Special Thanks:</u><br />" +
 					"- Current staff team<br />" +

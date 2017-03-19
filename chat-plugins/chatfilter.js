@@ -15,13 +15,13 @@ Config.chatfilter = function (message, user, room, connection) {
 			if (user.locked) return false;
 			Punishments.lock(user, Date.now() + 7 * 24 * 60 * 60 * 1000, "Said a banned word: " + bannedMessages[x]);
 			user.popup('You have been automatically locked for sending a message containing a banned word.');
-			Rooms('staff').add('[AutoLockMonitor] ' + (room ? '(' + room + ') ' : '') + Tools.escapeHTML(user.name) +
+			Rooms('staff').add('[AutoLockMonitor] ' + (room ? '(' + room + ') ' : '') + Chat.escapeHTML(user.name) +
 			' was automatically locked for trying to say "' + message + '"').update();
 			fs.appendFile('logs/modlog/modlog_staff.txt', '[' + (new Date().toJSON()) + '] (staff) ' + user.name + ' was locked from talking for saying a banned phrase.');
 			return false;
 		}
 	}
-	let pre_matches = (message.match(/psim.us|psim us|psm.us|psm us|JAxq0kSF/g) || []).length;
+	let pre_matches = (message.match(/psim.us|psim us|psm.us|psm us|Q9k9qYqX|JAxq0kSF/g) || []).length;
 	let final_check = (pre_matches >= 1 ? adWhitelist.filter(server => { return ~message.indexOf(server); }).length : 0);
 
 	if (!user.can('hotpatch') && (pre_matches >= 1 && final_check === 0 || pre_matches >= 2 && final_check >= 1 || message.match(adRegex))) {
